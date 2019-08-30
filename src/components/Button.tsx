@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, View, ViewStyle, StyleSheet, StyleProp } from 'react-native';
+import { Animated, View, ViewStyle, TextStyle, StyleSheet, StyleProp } from 'react-native';
 import color from 'color';
 
 import ActivityIndicator from './ActivityIndicator';
@@ -66,6 +66,13 @@ type Props = React.ComponentProps<typeof Surface> & {
    */
   contentStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
+
+  /**
+   * Override defaults for icon size and colour
+   */
+  iconSize?: number;
+  iconColor?: string;
   /**
    * @optional
    */
@@ -112,6 +119,7 @@ class Button extends React.Component<Props, State> {
   static defaultProps: Partial<Props> = {
     mode: 'text',
     uppercase: true,
+    iconSize: 16,
   };
 
   state = {
@@ -152,6 +160,9 @@ class Button extends React.Component<Props, State> {
       style,
       theme,
       contentStyle,
+      textStyle, 
+      iconSize,
+      iconColor, 
       ...rest
     } = this.props;
     const { colors, roundness } = theme;
@@ -220,7 +231,7 @@ class Button extends React.Component<Props, State> {
       borderRadius: roundness,
     };
     const touchableStyle = { borderRadius: roundness };
-    const textStyle = { color: textColor, ...font };
+
     const elevation =
       disabled || mode !== 'contained' ? 0 : this.state.elevation;
 
@@ -252,8 +263,8 @@ class Button extends React.Component<Props, State> {
         >
           <View style={[styles.content, contentStyle]}>
             {icon && loading !== true ? (
-              <View style={styles.icon}>
-                <Icon source={icon} size={16} color={textColor} />
+              <View style={{...styles.icon, ...{width: iconSize}}}>
+                <Icon source={icon} size={iconSize} color={iconColor ? iconColor : textColor} />
               </View>
             ) : null}
             {loading ? (
@@ -269,8 +280,9 @@ class Button extends React.Component<Props, State> {
                 styles.label,
                 compact && styles.compactLabel,
                 uppercase && styles.uppercaseLabel,
-                textStyle,
+                {color: textColor, ...font},
                 font,
+                textStyle,
               ]}
             >
               {children}

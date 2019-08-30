@@ -64,3 +64,19 @@ it('renders button with color', () => {
 
   expect(tree).toMatchSnapshot();
 });
+
+it('renders button with icon color and size', () => {
+  const tree = renderer
+    .create(<Button icon="camera" iconSize={32} iconColor={pink500}>Custom Button</Button>)
+    .toJSON();
+
+  expect(tree).toMatchSnapshot();
+});
+
+it('renders button with text style', () => {
+  const tree = renderer
+    .create(<Button textStyle={{fontSize:400}}>Custom Button</Button>)
+    .toJSON();
+
+  expect(tree).toMatchSnapshot();
+});
